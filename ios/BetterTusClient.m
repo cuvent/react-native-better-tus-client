@@ -3,4 +3,9 @@
 
 @interface RCT_EXTERN_MODULE(BetterTusClient, NSObject)
 
++ (BOOL)requiresMainQueueSetup
+{
+    return false;
+}
+
 @end
