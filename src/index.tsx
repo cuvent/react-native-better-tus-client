@@ -1,4 +1,9 @@
-import { NativeModules } from 'react-native';
+import {
+  EmitterSubscription,
+  EventEmitter,
+  NativeEventEmitter,
+  NativeModules,
+} from 'react-native';
 
 export type BetterTusClientEventNames =
   | 'onGlobalProgress'
@@ -32,8 +37,35 @@ type BetterTusClientType = {
     fileType: string,
     headers?: Record<string, string>
   ): Promise<void>;
+  eventEmitter: Omit<EventEmitter, 'addListener'> & {
+    addListener(
+      name: BetterTusClientEventNames,
+      callback: (
+        payload:
+          | BetterTusClientEventOnFailure
+          | BetterTusClientEventOnProgress
+          | BetterTusClientEventOnGlobalProgress
+          | BetterTusClientEventOnSuccess
+      ) => void
+    ): EmitterSubscription;
+  };
 };
 
 const { BetterTusClient } = NativeModules;
 
-export default BetterTusClient as BetterTusClientType;
+// BetterTusClient.createUpload = _createUpload;
+BetterTusClient.eventEmitter = new NativeEventEmitter(BetterTusClient);
+
+const BetterTusClientPatched = {
+  ...BetterTusClient,
+  createUpload: (withId, filePath, fileType, headers = {}) => {
+    return NativeModules.BetterTusClient.createUpload(
+      withId,
+      filePath,
+      fileType,
+      headers
+    );
+  },
+} as BetterTusClientType;
+
+export default BetterTusClientPatched;

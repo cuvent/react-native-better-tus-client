@@ -353,6 +353,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - TUSKit (from `https://github.com/hannojg/TUSKit.git`, branch `fix/upload-progress`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -368,7 +369,6 @@ SPEC REPOS:
     - FlipperKit
     - libevent
     - OpenSSL-Universal
-    - TUSKit
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -426,8 +426,16 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/Libraries/Vibration"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  TUSKit:
+    :branch: fix/upload-progress
+    :git: https://github.com/hannojg/TUSKit.git
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
+
+CHECKOUT OPTIONS:
+  TUSKit:
+    :commit: 4a9287621cd4ee52ddba4bc0f032a6208fc7618f
+    :git: https://github.com/hannojg/TUSKit.git
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
@@ -472,6 +480,6 @@ SPEC CHECKSUMS:
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 9fdcbd6f5deef860abc7a672a3ce267660f0b81c
+PODFILE CHECKSUM: 856daf43c3c45b4214f638cd65297bb26f243b27
 
 COCOAPODS: 1.10.1
