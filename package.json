@@ -36,13 +36,13 @@
     "ios",
     "android"
   ],
-  "repository": "https://github.com/hannojg/react-native-better-tus-client",
+  "repository": "https://github.com/cuvent/react-native-better-tus-client",
   "author": "Hanno Gödecke <hgoedecke@cuvent.com> (https://github.com/hannojg)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/hannojg/react-native-better-tus-client/issues"
+    "url": "https://github.com/cuvent/react-native-better-tus-client/issues"
   },
-  "homepage": "https://github.com/hannojg/react-native-better-tus-client#readme",
+  "homepage": "https://github.com/cuvent/react-native-better-tus-client#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
