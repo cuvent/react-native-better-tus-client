@@ -1,19 +1,31 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text } from 'react-native';
-import BetterTusClient from 'react-native-better-tus-client';
-
+import { StyleSheet, View, Button } from 'react-native';
+import {
+  ImagePickerResponse,
+  launchImageLibrary,
+} from 'react-native-image-picker';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const handleImagePickerSelection = React.useCallback(
+    (response: ImagePickerResponse) => {
+      console.log(response);
+    },
+    []
+  );
 
-  React.useEffect(() => {
-    BetterTusClient.multiply(3, 7).then(setResult);
-  }, []);
+  const openImagePicker = React.useCallback(() => {
+    launchImageLibrary(
+      {
+        mediaType: 'photo',
+      },
+      handleImagePickerSelection
+    );
+  }, [handleImagePickerSelection]);
 
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Button title="Select image from gallery" onPress={openImagePicker} />
     </View>
   );
 }
