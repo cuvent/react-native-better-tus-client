@@ -353,7 +353,7 @@ DEPENDENCIES:
   - React-RCTText (from `../node_modules/react-native/Libraries/Text`)
   - React-RCTVibration (from `../node_modules/react-native/Libraries/Vibration`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
-  - TUSKit (from `https://github.com/hannojg/TUSKit.git`, branch `fix/upload-progress`)
+  - TUSKit (from `https://github.com/hannojg/TUSKit.git`, branch `feature/background-support`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -427,14 +427,14 @@ EXTERNAL SOURCES:
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
   TUSKit:
-    :branch: fix/upload-progress
+    :branch: feature/background-support
     :git: https://github.com/hannojg/TUSKit.git
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 CHECKOUT OPTIONS:
   TUSKit:
-    :commit: 4a9287621cd4ee52ddba4bc0f032a6208fc7618f
+    :commit: d20e0bcf9e5f080235765efdd95875af7aef48ec
     :git: https://github.com/hannojg/TUSKit.git
 
 SPEC CHECKSUMS:
@@ -476,10 +476,10 @@ SPEC CHECKSUMS:
   React-RCTText: 5c51df3f08cb9dedc6e790161195d12bac06101c
   React-RCTVibration: ae4f914cfe8de7d4de95ae1ea6cc8f6315d73d9d
   ReactCommon: 73d79c7039f473b76db6ff7c6b159c478acbbb3b
-  TUSKit: 86180bd95742e3fb587de4864b29964ff7076c0a
+  TUSKit: befb40e402aae1ee35a6b2b1edda26416bd0e473
   Yoga: 4bd86afe9883422a7c4028c00e34790f560923d6
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 856daf43c3c45b4214f638cd65297bb26f243b27
+PODFILE CHECKSUM: e3466161c84a9b076df4956377ad55b5d6e1b94d
 
 COCOAPODS: 1.10.1
