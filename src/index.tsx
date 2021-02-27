@@ -53,7 +53,6 @@ type BetterTusClientType = {
 
 const { BetterTusClient } = NativeModules;
 
-// BetterTusClient.createUpload = _createUpload;
 BetterTusClient.eventEmitter = new NativeEventEmitter(BetterTusClient);
 
 const BetterTusClientPatched = {
