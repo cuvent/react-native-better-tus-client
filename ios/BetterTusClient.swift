@@ -15,6 +15,7 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
     }
 
     func initialize() {
+        // let backgroundUrlSession = URLSessionConfiguration.background(withIdentifier: "com.better-tus-client")
         let config = TUSConfig(withUploadURLString: endpoint, andSessionConfig: URLSessionConfiguration.default)
         TUSClient.setup(with: config)
         TUSClient.shared.delegate = self

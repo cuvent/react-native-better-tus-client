@@ -40,6 +40,7 @@ export default function App() {
       },
       (response: ImagePickerResponse) => {
         if (response.uri != null) {
+          console.log(response);
           setUploadQueue((prev) => [...prev, response]);
         }
       }
