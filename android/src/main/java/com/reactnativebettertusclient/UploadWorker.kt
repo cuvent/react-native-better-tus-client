@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 import kotlin.math.ceil
 
-//TODO: notify success to other components (module)
 //TODO: implement onStopped
 class UploadWorker(context: Context, parameters: WorkerParameters) :
   CoroutineWorker(context, parameters) {
