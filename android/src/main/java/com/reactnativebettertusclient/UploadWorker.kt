@@ -10,12 +10,9 @@ import androidx.work.workDataOf
 import io.tus.java.client.TusExecutor
 import io.tus.java.client.TusUpload
 import io.tus.java.client.TusUploader
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import java.io.File
-import kotlin.math.ceil
 
-//TODO: implement onStopped
+//TODO: implement onStopped (trigger failure so that JS receives failure event?)
 class UploadWorker(context: Context, parameters: WorkerParameters) :
   CoroutineWorker(context, parameters) {
 
@@ -38,6 +35,8 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
     val upload = prepareUpload(payload)
     val uploadedUrl = syncUpload(upload)
 
+    cleanup(getUploadPathForPayload(payload))
+
     if (uploadedUrl == null) {
       return Result.failure()
     }
@@ -51,7 +50,7 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
     // we need to copy the file to a save place
     val inputStream = applicationContext.contentResolver.openInputStream(Uri.parse(payload.filePath))
       ?: throw Error("Can't open input stream from file ${payload.filePath}")
-    val file = inputStream.toFile(tusCacheDir + payload.id + payload.fileExtension)
+    val file = inputStream.toFile(getUploadPathForPayload(payload))
     Log.d("UploadWorker", "Moving file to ${file.absolutePath}")
     return TusUpload(file)
   }
@@ -82,8 +81,6 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
           selfRef.setProgressAsync(bytesUploaded.toDouble(), totalBytes.toDouble())
         } while (uploader.uploadChunk() > -1)
 
-        //TODO: cleanup file
-
         uploadedUrl = uploader.uploadURL.toString()
 
         // Allow the HTTP connection to be closed and cleaned up
@@ -101,6 +98,17 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
         .putDouble(KEY_PROGRESS_TOTAL, total)
         .build()
     )
+  }
+
+  private fun cleanup(filePath: String) {
+    val file = File(filePath)
+    if (file.exists()) {
+      file.delete()
+    }
+  }
+
+  private fun getUploadPathForPayload(payload: UploadWorkPayload): String {
+    return tusCacheDir + payload.id + payload.fileExtension
   }
 
   companion object {
