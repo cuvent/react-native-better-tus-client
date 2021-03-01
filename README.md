@@ -13,7 +13,7 @@ Make sure to configure CI servers to have access to the repo.
 ## Setup:
 
 Both on android and iOS the default concurrency mode is in-sequence, which means that one upload
-will be processed after each other. THis behavior can be changed on android.
+will be processed after each other. This behavior can be changed on android.
 
 ### Android
 
@@ -34,9 +34,12 @@ Two modes are available:
 - `ConcurrencyMode.SEQUENCE` (Default) executes one upload after another. Good when you have a lot of uploads
   and want to make sure that each upload gets processed without timeouts or similar.
 
-#### Modify the max uploads at a time in parallel mode
+#### Modify the auto-resume behavior / max uploads at a time in parallel mode
 
-_These changes are only needed if you want to change the concurrency behavior of the uploading queue_
+_These changes are only needed if you want to change the auto-resume and concurrency behavior of the uploading queue_
+
+When you apply these changes the queue won't automatically resume on app start. You need to call
+`resumeAll` to continue with the uploading of prior uploads.
 
 Add the to your AndroidManifest under the `Application` tag. _Note_: You probably need to add the `tools`
 namespace to your manifest definition:

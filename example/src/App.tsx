@@ -18,6 +18,12 @@ export default function App() {
   const [uploaded, setUploaded] = React.useState(0);
 
   const startUpload = React.useCallback(() => {
+    if (uploadQueue.length <= 0) {
+      console.debug('CALLED RESUME ALL');
+      BetterTusClient.resumeAll();
+      return;
+    }
+
     setUploading(0);
     setUploaded(0);
     uploadQueue.forEach((response) => {
@@ -74,7 +80,7 @@ export default function App() {
       <Text>Uploading {uploading}</Text>
       <Text>Uploaded {uploaded}</Text>
       <Button title="Select image from gallery" onPress={openImagePicker} />
-      <Button title="Start upload" onPress={startUpload} />
+      <Button title="Start/Resume upload" onPress={startUpload} />
     </View>
   );
 }

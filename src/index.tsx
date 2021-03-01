@@ -37,6 +37,7 @@ type BetterTusClientType = {
     fileType: string,
     headers?: Record<string, string>
   ): Promise<void>;
+  resumeAll(): Promise<void>;
   eventEmitter: Omit<EventEmitter, 'addListener'> & {
     addListener(
       name: BetterTusClientEventNames,

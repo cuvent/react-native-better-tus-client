@@ -1,6 +1,6 @@
 package com.reactnativebettertusclient
 
-import android.util.Log
+import android.content.Intent
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.work.*
@@ -9,11 +9,17 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import kotlinx.coroutines.launch
 import java.util.*
 
+
 class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContextBaseJavaModuleWithLifecycle(reactContext) {
   private val moduleName = "BetterTusClient";
 
   override fun getName(): String {
     return moduleName
+  }
+
+  init {
+    val intent = Intent(reactContext, DetectAppStopService::class.java)
+    reactContext.startService(intent)
   }
 
   private val eventEmitter by lazy { reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java) }
@@ -24,6 +30,21 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
     lifecycleScope.launch {
       enqueueUploadAsWorkRequest(upload)
     }
+  }
+
+  @ReactMethod
+  fun resumeAll(promise: Promise) {
+    // instantiating the work manager should cause all uploads (worker) to resume automatically
+    val query = WorkQuery.Builder
+      .fromTags(listOf(KEY_WORKER_TAG))
+      .addStates(listOf(WorkInfo.State.CANCELLED))
+      .build()
+
+    val canceled = WorkManager.getInstance(reactApplicationContext).getWorkInfos(query).get()
+    canceled.forEach {
+      // TODO: implement rescheduling
+    }
+    promise.resolve(null)
   }
 
   private suspend fun enqueueUploadAsWorkRequest(upload: UploadWorkPayload) {

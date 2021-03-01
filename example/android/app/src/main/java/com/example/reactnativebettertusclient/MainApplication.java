@@ -23,7 +23,7 @@ import com.reactnativebettertusclient.BetterTusClientConfig;
 import com.reactnativebettertusclient.BetterTusClientPackage;
 import com.reactnativebettertusclient.ConcurrencyMode;
 
-public class MainApplication extends Application implements ReactApplication {
+public class MainApplication extends Application implements ReactApplication, Configuration.Provider {
 
   private final ReactNativeHost mReactNativeHost =
     new ReactNativeHost(this) {
@@ -86,5 +86,11 @@ public class MainApplication extends Application implements ReactApplication {
         e.printStackTrace();
       }
     }
+  }
+
+  @NonNull
+  @Override
+  public Configuration getWorkManagerConfiguration() {
+    return new Configuration.Builder().build();
   }
 }
