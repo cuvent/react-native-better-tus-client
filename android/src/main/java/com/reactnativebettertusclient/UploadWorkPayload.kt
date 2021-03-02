@@ -8,6 +8,7 @@ data class UploadWorkPayload(
   val id: String,
   val filePath: String,
   val fileExtension: String,
+  val metadata: Map<String, String> = mapOf(),
   val headers: Map<String, String> = mapOf()
 ) {
 

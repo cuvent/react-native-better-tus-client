@@ -20,6 +20,7 @@ RCT_EXTERN_METHOD(initialize:(NSString *)endpoint
 RCT_EXTERN_METHOD(createUpload:(NSString *)withId
                   filePath:(NSString *)filePath
                   fileType:(NSString *)fileType
+                  metadata:(NSDictionary *)metadata
                   headers:(NSDictionary *)headers
                   )
 

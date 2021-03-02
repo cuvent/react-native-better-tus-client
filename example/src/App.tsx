@@ -20,7 +20,9 @@ export default function App() {
 
   const startUpload = React.useCallback(() => {
     if (uploadQueue.length <= 0) {
-      console.debug('CALLED RESUME ALL');
+      console.debug(
+        'Invoked resume all. On android it can take several seconds until the uploads start again.'
+      );
       BetterTusClient.resumeAll();
       return;
     }
@@ -33,7 +35,9 @@ export default function App() {
         // @ts-expect-error We checked earlier that this isn't null!
         response.uri,
         '.jpg',
-        {}
+        {
+          exampleMetadata: 'exampleValue',
+        }
       );
       setUploading((prev) => prev + 1);
     });

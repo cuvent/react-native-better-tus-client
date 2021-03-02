@@ -15,9 +15,10 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
         TUSClient.shared.delegate = self
     }
 
-    @objc(createUpload:filePath:fileType:headers:)
-    func createUpload(withId: String, filePath: String, fileType: String, headers: [String: String] = [:]) {
+    @objc(createUpload:filePath:fileType:metadata:headers:)
+    func createUpload(withId: String, filePath: String, fileType: String, metadata: [String: String] = [:], headers: [String: String] = [:]) {
         let upload = TUSUpload(withId: withId, andFilePathString: filePath, andFileType: fileType)
+        upload.metadata = metadata
         TUSClient.shared.createOrResume(forUpload: upload, withCustomHeaders: headers)
     }
     

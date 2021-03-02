@@ -52,7 +52,9 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
       ?: throw Error("Can't open input stream from file ${payload.filePath}")
     val file = inputStream.toFile(getUploadPathForPayload(payload))
     Log.d("UploadWorker", "Moving file to ${file.absolutePath}")
-    return TusUpload(file)
+    val upload = TusUpload(file)
+    upload.metadata = payload.metadata
+    return upload
   }
 
   private fun syncUpload(upload: TusUpload): String? {

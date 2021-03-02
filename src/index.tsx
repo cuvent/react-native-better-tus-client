@@ -36,6 +36,7 @@ type BetterTusClientType = {
     withId: string,
     filePath: string,
     fileType: string,
+    metadata?: Record<string, string>,
     headers?: Record<string, string>
   ): Promise<void>;
   resumeAll(): Promise<void>;
@@ -59,11 +60,12 @@ BetterTusClient.eventEmitter = new NativeEventEmitter(BetterTusClient);
 
 const BetterTusClientPatched = {
   ...BetterTusClient,
-  createUpload: (withId, filePath, fileType, headers = {}) => {
+  createUpload: (withId, filePath, fileType, metadata = {}, headers = {}) => {
     return NativeModules.BetterTusClient.createUpload(
       withId,
       filePath,
       fileType,
+      metadata,
       headers
     );
   },

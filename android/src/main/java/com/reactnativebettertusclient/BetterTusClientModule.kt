@@ -25,8 +25,8 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
   }
 
   @ReactMethod
-  fun createUpload(withId: String, filePath: String, fileType: String, headers: ReadableMap?) {
-    val upload = UploadWorkPayload(withId, filePath, fileType, headers.toStringMap())
+  fun createUpload(withId: String, filePath: String, fileType: String, metadata: ReadableMap?, headers: ReadableMap?) {
+    val upload = UploadWorkPayload(withId, filePath, fileType, metadata.toStringMap(), headers.toStringMap())
     lifecycleScope.launch {
       enqueueUploadAsWorkRequest(upload)
     }
