@@ -7,6 +7,7 @@ import {
 } from 'react-native-image-picker';
 import BetterTusClient, {
   BetterTusClientEventOnProgress,
+  BetterTusClientEventOnSuccess,
 } from 'react-native-better-tus-client';
 
 export default function App() {
@@ -64,7 +65,8 @@ export default function App() {
       );
     });
     BetterTusClient.eventEmitter.addListener('onSuccess', (_payload) => {
-      console.log('UPLOADED!!!');
+      const payload = _payload as BetterTusClientEventOnSuccess;
+      console.log('UPLOADED', payload.uploadId, 'to url', payload.url);
       setUploaded((prev) => prev + 1);
       setUploading((prev) => prev - 1);
     });
