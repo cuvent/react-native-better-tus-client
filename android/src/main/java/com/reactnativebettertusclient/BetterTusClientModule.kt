@@ -33,12 +33,21 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
     promise.resolve(null)
   }
 
+  @ReactMethod
+  fun getStateForUploadById(uploadId: String, promise: Promise) {
+    val info = WorkManager.getInstance(reactApplicationContext).getWorkInfosByTag(uploadId).get()
+    val state = info.first()?.state
+    promise.resolve(state?.name)
+  }
+
   private suspend fun enqueueUploadAsWorkRequest(upload: UploadWorkPayload) {
     val uploadSerialized = upload.toJsonString()
 
+    // TODO: should we check that a upload with ID can't be added multiple times?
     val uploadWorkRequest = OneTimeWorkRequestBuilder<UploadWorker>()
       .setInputData(workDataOf(UploadWorker.KEY_UPLOAD to uploadSerialized))
       .addTag(KEY_WORKER_TAG)
+      .addTag(upload.id)
       .build()
 
     if (BetterTusClientConfig.config.concurrencyMode == ConcurrencyMode.PARALLEL) {
