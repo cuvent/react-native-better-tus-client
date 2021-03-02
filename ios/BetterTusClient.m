@@ -18,4 +18,13 @@ RCT_EXTERN_METHOD(createUpload:(NSString *)withId
                   headers:(NSDictionary *)headers
                   )
 
+RCT_EXTERN_METHOD(getStateForUploadById:(NSString *)withId
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
+RCT_EXTERN_METHOD(resumeAll:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
 @end

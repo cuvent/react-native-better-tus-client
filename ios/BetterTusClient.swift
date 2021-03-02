@@ -15,7 +15,6 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
     }
 
     func initialize() {
-        // let backgroundUrlSession = URLSessionConfiguration.background(withIdentifier: "com.better-tus-client")
         let config = TUSConfig(withUploadURLString: endpoint, andSessionConfig: URLSessionConfiguration.default)
         TUSClient.setup(with: config)
         TUSClient.shared.delegate = self
@@ -25,6 +24,38 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
     func createUpload(withId: String, filePath: String, fileType: String, headers: [String: String] = [:]) {
         let upload = TUSUpload(withId: withId, andFilePathString: filePath, andFileType: fileType)
         TUSClient.shared.createOrResume(forUpload: upload, withCustomHeaders: headers)
+    }
+    
+    @objc(getStateForUploadById:resolver:rejecter:)
+    func getStateForUploadById(withId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        let upload = TUSClient.shared.currentUploads?.first(where: { (_upload) -> Bool in
+            return _upload.id == withId
+        })
+        let status = upload?.getStatus()
+        if (status == nil) {
+            resolve(nil)
+            return
+        }
+        
+        switch status {
+        case .paused, .canceled:
+            resolve("CANCELLED")
+            break;
+        case .finished:
+            resolve("SUCCEEDED")
+            break;
+        case .uploading:
+            resolve("RUNNING")
+            break;
+        default:
+            resolve("ENQUEUED")
+        }
+    }
+    
+    @objc(resumeAll:rejecter:)
+    func resumeAll(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
+        TUSClient.shared.resumeAll()
+        resolve(nil)
     }
 
     // MARK: Progress listeners, event emitter
