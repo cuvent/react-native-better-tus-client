@@ -5,7 +5,7 @@ A (better & up-to-date) tus client for react-native with background upload suppo
 ## Installation
 
 ```sh
-npm install git+https://github.com/cuvent/react-native-better-tus-client.git
+npm i --save @cuvent/react-native-better-tus-client
 ```
 
 Make sure to configure CI servers to have access to the repo.
