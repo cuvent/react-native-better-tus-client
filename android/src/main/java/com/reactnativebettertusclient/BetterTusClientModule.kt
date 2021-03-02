@@ -1,6 +1,5 @@
 package com.reactnativebettertusclient
 
-import android.content.Intent
 import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.work.*
@@ -15,11 +14,6 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
 
   override fun getName(): String {
     return moduleName
-  }
-
-  init {
-    val intent = Intent(reactContext, DetectAppStopService::class.java)
-    reactContext.startService(intent)
   }
 
   private val eventEmitter by lazy { reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java) }
