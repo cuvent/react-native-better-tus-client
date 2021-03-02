@@ -31,6 +31,7 @@ export type BetterTusClientEventOnFailure = {
 };
 
 type BetterTusClientType = {
+  initialize(endpoint: string): Promise<void>;
   createUpload(
     withId: string,
     filePath: string,

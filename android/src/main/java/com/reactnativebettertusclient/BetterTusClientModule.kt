@@ -19,6 +19,12 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
   private val eventEmitter by lazy { reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java) }
 
   @ReactMethod
+  fun initialize(endpoint: String, promise: Promise) {
+    TUSClientShared.initialize(reactApplicationContext, endpoint)
+    promise.resolve(null)
+  }
+
+  @ReactMethod
   fun createUpload(withId: String, filePath: String, fileType: String, headers: ReadableMap?) {
     val upload = UploadWorkPayload(withId, filePath, fileType, headers.toStringMap())
     lifecycleScope.launch {

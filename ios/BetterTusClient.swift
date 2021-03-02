@@ -1,7 +1,5 @@
 import TUSKit
 
-let endpoint = "https://tusd.tusdemo.net/files"
-
 let eventOnGlobalProgress = "onGlobalProgress"
 let eventOnProgress = "onProgress"
 let eventOnSuccess = "onSuccess"
@@ -9,12 +7,9 @@ let eventOnFailure = "onFailure"
 
 @objc(BetterTusClient)
 public class BetterTusClient: RCTEventEmitter, TUSDelegate {
-    override init() {
-        super.init()
-        initialize()
-    }
-
-    func initialize() {
+    
+    @objc(initialize:resolver:rejecter:)
+    func initialize(endpoint: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let config = TUSConfig(withUploadURLString: endpoint, andSessionConfig: URLSessionConfiguration.default)
         TUSClient.setup(with: config)
         TUSClient.shared.delegate = self

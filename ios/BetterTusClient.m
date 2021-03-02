@@ -12,6 +12,11 @@
     return NO;
 }
 
+RCT_EXTERN_METHOD(initialize:(NSString *)endpoint
+                  resolver:(RCTPromiseResolveBlock)resolve
+                  rejecter:(RCTPromiseRejectBlock)reject
+                  )
+
 RCT_EXTERN_METHOD(createUpload:(NSString *)withId
                   filePath:(NSString *)filePath
                   fileType:(NSString *)fileType

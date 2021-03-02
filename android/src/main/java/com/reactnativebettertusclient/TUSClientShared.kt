@@ -9,21 +9,24 @@ import java.net.URL
 
 class TUSClientShared {
   companion object {
-    @Volatile
-    private var client: TusClient? = null;
+    private var client: TusClient? = null
 
     @JvmStatic
     fun getInstance(context: Context): TusClient {
-      return client ?: synchronized(this) {
-        client ?: initialize(context).also { client = it }
+      if (client == null) {
+        throw Error("You havent called BetterTusClient.initialize('your_endpoint') yet!")
       }
+
+      return client as TusClient;
     }
 
-    private fun initialize(context: Context): TusClient {
+    @JvmStatic
+    fun initialize(context: Context, endpoint: String): TusClient {
       val pref: SharedPreferences = context.getSharedPreferences("tus", 0)
       val client = TusClient()
-      client.uploadCreationURL = URL("https://tusd.tusdemo.net/files/")
+      client.uploadCreationURL = URL(endpoint)
       client.enableResuming(TusPreferencesURLStore(pref))
+      this.client = client
       return client
     }
   }
