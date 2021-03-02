@@ -29,15 +29,7 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
   @ReactMethod
   fun resumeAll(promise: Promise) {
     // instantiating the work manager should cause all uploads (worker) to resume automatically
-    val query = WorkQuery.Builder
-      .fromTags(listOf(KEY_WORKER_TAG))
-      .addStates(listOf(WorkInfo.State.CANCELLED))
-      .build()
-
-    val canceled = WorkManager.getInstance(reactApplicationContext).getWorkInfos(query).get()
-    canceled.forEach {
-      // TODO: implement rescheduling
-    }
+    WorkManager.getInstance(reactApplicationContext);
     promise.resolve(null)
   }
 
