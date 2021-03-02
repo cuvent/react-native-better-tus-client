@@ -28,9 +28,30 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
 
   @ReactMethod
   fun resumeAll(promise: Promise) {
-    // instantiating the work manager should cause all uploads (worker) to resume automatically
-    WorkManager.getInstance(reactApplicationContext);
-    promise.resolve(null)
+    // get all enqueued and running or blocked work
+    val query = WorkQuery.Builder
+      .fromTags(listOf(KEY_WORKER_TAG))
+      .addStates(listOf(WorkInfo.State.ENQUEUED, WorkInfo.State.RUNNING, WorkInfo.State.BLOCKED))
+      .build()
+
+    // two things are happening here:
+    // - By calling `getInstance` the WorkManager gets (eventually) initiated, and thus the uploads
+    //   will resume shortly.
+    // - We get all "pending" work, so we can start observing it.
+    val workInfos = WorkManager.getInstance(reactApplicationContext).getWorkInfos(query).get()
+
+    lifecycleScope.launch {
+      workInfos.forEach { workInfo ->
+        val uploadId = workInfo.tags.firstOrNull {
+          it != KEY_WORKER_TAG && UploadWorker.javaClass.canonicalName?.contains(it, true) == false
+        }
+        if (uploadId != null) {
+          startObserving(workInfo.id, uploadId)
+        }
+      }
+
+      promise.resolve(null)
+    }
   }
 
   @ReactMethod
