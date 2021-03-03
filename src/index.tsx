@@ -54,12 +54,12 @@ type BetterTusClientType = {
   };
 };
 
-const { BetterTusClient } = NativeModules;
+const { BetterTusClient: BetterTusClientNM } = NativeModules;
 
-BetterTusClient.eventEmitter = new NativeEventEmitter(BetterTusClient);
+BetterTusClientNM.eventEmitter = new NativeEventEmitter(BetterTusClientNM);
 
-const BetterTusClientPatched = {
-  ...BetterTusClient,
+const BetterTusClient = {
+  ...BetterTusClientNM,
   createUpload: (withId, filePath, fileType, metadata = {}, headers = {}) => {
     return NativeModules.BetterTusClient.createUpload(
       withId,
@@ -71,4 +71,4 @@ const BetterTusClientPatched = {
   },
 } as BetterTusClientType;
 
-export default BetterTusClientPatched;
+export default BetterTusClient;
