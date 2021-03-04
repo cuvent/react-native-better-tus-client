@@ -8,9 +8,13 @@ data class UploadWorkPayload(
   val id: String,
   val filePath: String,
   val fileExtension: String,
-  val metadata: Map<String, String> = mapOf(),
+  val metadata: MutableMap<String, String> = mutableMapOf(),
   val headers: Map<String, String> = mapOf()
 ) {
+
+  init {
+    metadata["filename"] = "${id}${if (fileExtension.startsWith(".")) fileExtension else ".${fileExtension}"}"
+  }
 
   fun toJsonString(): String {
     return Json.encodeToString(serializer(), this);
