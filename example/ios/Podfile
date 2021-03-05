@@ -9,7 +9,7 @@ target 'BetterTusClientExample' do
   use_react_native!(:path => config["reactNativePath"])
 
   pod 'react-native-better-tus-client', :path => '../..'
-  pod 'TUSKit', :git => 'https://github.com/hannojg/TUSKit.git', :branch => 'patch-1'
+  pod 'TUSKit', :git => 'https://github.com/hannojg/TUSKit.git', :branch => 'latest'
   
   # Enables Flipper.
   #
