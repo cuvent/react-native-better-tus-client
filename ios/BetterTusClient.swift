@@ -37,6 +37,9 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
         case .paused, .canceled:
             resolve("CANCELLED")
             break;
+        case .failed:
+            resolve("FAILED")
+            break;
         case .finished:
             resolve("SUCCEEDED")
             break;

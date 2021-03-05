@@ -42,7 +42,9 @@ type BetterTusClientType = {
   resumeAll(): Promise<void>;
   getStateForUploadById(
     id: string
-  ): Promise<'ENQUEUED' | 'RUNNING' | 'SUCCEEDED' | 'CANCELLED' | undefined>;
+  ): Promise<
+    'ENQUEUED' | 'RUNNING' | 'SUCCEEDED' | 'CANCELLED' | 'FAILED' | undefined
+  >;
   eventEmitter: Omit<EventEmitter, 'addListener'> & {
     addListener(
       name: BetterTusClientEventNames,
