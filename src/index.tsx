@@ -36,8 +36,8 @@ type BetterTusClientType = {
     withId: string,
     filePath: string,
     fileType: string,
-    metadata?: Record<string, string | number>,
-    headers?: Record<string, string | number>
+    metadata?: Record<string, string>,
+    headers?: Record<string, string>
   ): Promise<void>;
   resumeAll(): Promise<void>;
   getStateForUploadById(
