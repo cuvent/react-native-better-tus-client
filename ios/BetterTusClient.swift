@@ -56,6 +56,16 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
         TUSClient.shared.resumeAll()
         resolve(nil)
     }
+    
+    @objc(cancel:)
+    func cancel(uploadId: String) {
+        let upload = TUSClient.shared.currentUploads?.first(where: { (_upload) -> Bool in
+            return _upload.id == uploadId
+        })
+        if (upload != nil) {
+            TUSClient.shared.cancel(forUpload: upload!)
+        }
+    }
 
     // MARK: Progress listeners, event emitter
 

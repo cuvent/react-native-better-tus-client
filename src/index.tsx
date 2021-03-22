@@ -40,6 +40,7 @@ type BetterTusClientType = {
     headers?: Record<string, string>
   ): void;
   resumeAll(): Promise<void>;
+  cancel(id: string): void;
   getStateForUploadById(
     id: string
   ): Promise<

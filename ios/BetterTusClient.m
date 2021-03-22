@@ -33,4 +33,6 @@ RCT_EXTERN_METHOD(resumeAll:(RCTPromiseResolveBlock)resolve
                   rejecter:(RCTPromiseRejectBlock)reject
                   )
 
+RCT_EXTERN_METHOD(cancel:(NSString *)uploadId)
+
 @end

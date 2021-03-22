@@ -67,6 +67,11 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
     promise.resolve(state?.name)
   }
 
+  @ReactMethod
+  fun cancel(uploadId: String) {
+    WorkManager.getInstance(reactApplicationContext).cancelAllWorkByTag(uploadId)
+  }
+
   private suspend fun enqueueUploadAsWorkRequest(upload: UploadWorkPayload) {
     val uploadSerialized = upload.toJsonString()
 
