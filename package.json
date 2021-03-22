@@ -1,6 +1,6 @@
 {
   "name": "@cuvent/react-native-better-tus-client",
-  "version": "0.3.5",
+  "version": "0.4.0",
   "description": "A (better & up-to-date) tus client for react-native with background upload support",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
