@@ -7,7 +7,7 @@ let eventOnFailure = "onFailure"
 
 @objc(BetterTusClient)
 public class BetterTusClient: RCTEventEmitter, TUSDelegate {
-    
+
     @objc(initialize:resolver:rejecter:)
     func initialize(endpoint: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let config = TUSConfig(withUploadURLString: endpoint, andSessionConfig: URLSessionConfiguration.default)
@@ -21,7 +21,7 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
         upload.metadata = metadata
         TUSClient.shared.createOrResume(forUpload: upload, withCustomHeaders: headers)
     }
-    
+
     @objc(getStateForUploadById:resolver:rejecter:)
     func getStateForUploadById(withId: String, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         let upload = TUSClient.shared.currentUploads?.first(where: { (_upload) -> Bool in
@@ -32,7 +32,7 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
             resolve(nil)
             return
         }
-        
+
         switch status {
         case .paused, .canceled:
             resolve("CANCELLED")
@@ -50,13 +50,13 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
             resolve("ENQUEUED")
         }
     }
-    
+
     @objc(resumeAll:rejecter:)
     func resumeAll(resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         TUSClient.shared.resumeAll()
         resolve(nil)
     }
-    
+
     @objc(cancel:)
     func cancel(uploadId: String) {
         let upload = TUSClient.shared.currentUploads?.first(where: { (_upload) -> Bool in
@@ -64,6 +64,8 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
         })
         if (upload != nil) {
             TUSClient.shared.cancel(forUpload: upload!)
+            let index = TUSClient.shared.currentUploads?.firstIndex(of: upload!)
+            TUSClient.shared.currentUploads?.remove(at: index!);
         }
     }
 
