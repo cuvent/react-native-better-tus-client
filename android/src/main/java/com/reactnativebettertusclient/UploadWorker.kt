@@ -7,6 +7,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.WorkerParameters
 import androidx.work.workDataOf
+import io.tus.java.client.ProtocolException
 import io.tus.java.client.TusExecutor
 import io.tus.java.client.TusUpload
 import io.tus.java.client.TusUploader
@@ -32,18 +33,27 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
     val payload = UploadWorkPayload.fromJsonString(serializedUpload)
     Log.d("UploadWorker", "Queued work with id ${payload.id}, worker id ${this.id}")
 
-    val upload = prepareUpload(payload)
-    val uploadedUrl = syncUpload(upload)
+    try {
+        val upload = prepareUpload(payload)
+        val uploadedUrl = syncUpload(upload)
 
-    cleanup(getUploadPathForPayload(payload))
+        cleanup(getUploadPathForPayload(payload))
 
-    if (uploadedUrl == null) {
-      return Result.failure()
+        if (uploadedUrl == null) {
+            return Result.failure()
+        }
+
+        return Result.success(workDataOf(
+                KEY_UPLOADED_URL to uploadedUrl
+        ))
+    } catch (e: ProtocolException) {
+        e.printStackTrace()
+        Log.e("UploadWorker", "Failed to upload file, error code ${e.causingConnection.responseCode}")
+        return Result.failure(workDataOf(
+                KEY_HTTP_ERROR_CODE to e.causingConnection.responseCode,
+                KEY_ERROR_MESSAGE to e.message
+        ))
     }
-
-    return Result.success(workDataOf(
-      KEY_UPLOADED_URL to uploadedUrl
-    ))
   }
 
   private fun prepareUpload(payload: UploadWorkPayload): TusUpload {
@@ -95,10 +105,10 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
 
   fun setProgressAsync(uploaded: Double, total: Double) {
     setProgressAsync(
-      Data.Builder()
-        .putDouble(KEY_PROGRESS_UPLOADED, uploaded)
-        .putDouble(KEY_PROGRESS_TOTAL, total)
-        .build()
+            Data.Builder()
+                    .putDouble(KEY_PROGRESS_UPLOADED, uploaded)
+                    .putDouble(KEY_PROGRESS_TOTAL, total)
+                    .build()
     )
   }
 
@@ -118,6 +128,8 @@ class UploadWorker(context: Context, parameters: WorkerParameters) :
     const val KEY_PROGRESS_UPLOADED = "KEY_PROGRESS_UPLOADED"
     const val KEY_PROGRESS_TOTAL = "KEY_PROGRESS_TOTAL"
     const val KEY_UPLOADED_URL = "KEY_URL"
+    const val KEY_HTTP_ERROR_CODE = "KEY_HTTP_ERROR_CODE"
+    const val KEY_ERROR_MESSAGE = "KEY_ERROR_MESSAGE"
   }
 }
 

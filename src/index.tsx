@@ -26,7 +26,10 @@ export type BetterTusClientEventOnSuccess = {
 };
 export type BetterTusClientEventOnFailure = {
   uploadId?: string;
+  // the error message
   error?: string;
+  // the http status code that was received when the upload request failed
+  errorCode?: number;
   message?: string;
 };
 

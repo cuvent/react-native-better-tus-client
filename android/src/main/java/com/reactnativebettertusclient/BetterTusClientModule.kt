@@ -119,6 +119,14 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
       }
 
       if (it.state == WorkInfo.State.FAILED) {
+        val errorCode = it.outputData.getInt(UploadWorker.KEY_HTTP_ERROR_CODE, -1)
+        if (errorCode > -1) {
+          eventObject.putInt("errorCode", errorCode)
+        }
+        val errorMsg = it.outputData.getString(UploadWorker.KEY_ERROR_MESSAGE)
+        if (errorMsg != null) {
+          eventObject.putString("error", errorMsg)
+        }
         eventEmitter.emit(EVENT_FAILURE, eventObject)
       }
     }
