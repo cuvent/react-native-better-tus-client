@@ -8,8 +8,6 @@ A (better & up-to-date) tus client for react-native with background upload suppo
 npm i --save @cuvent/react-native-better-tus-client
 ```
 
-Make sure to configure CI servers to have access to the repo.
-
 ## Setup:
 
 Both on android and iOS the default concurrency mode is in-sequence, which means that one upload
