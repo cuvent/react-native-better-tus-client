@@ -63,6 +63,11 @@ class BetterTusClientModule(reactContext: ReactApplicationContext) : ReactContex
   @ReactMethod
   fun getStateForUploadById(uploadId: String, promise: Promise) {
     val info = WorkManager.getInstance(reactApplicationContext).getWorkInfosByTag(uploadId).get()
+    if (info.size <= 0) {
+        promise.reject("No known state for the upload id.")
+        return
+    }
+
     val state = info.first()?.state
     promise.resolve(state?.name)
   }
