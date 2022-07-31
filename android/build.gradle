@@ -3,21 +3,29 @@ buildscript {
   def kotlin_version = rootProject.ext.has('kotlinVersion') ? rootProject.ext.get('kotlinVersion') : project.properties['BetterTusClient_kotlinVersion']
 
   repositories {
-    google()
-    jcenter()
+      google()
+      mavenCentral()
   }
 
   dependencies {
-    classpath 'com.android.tools.build:gradle:3.2.1'
+    classpath 'com.android.tools.build:gradle:3.5.3'
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
   }
 }
 
+def isNewArchitectureEnabled() {
+  return rootProject.hasProperty("newArchEnabled") &&  rootProject.getProperty("newArchEnabled") == "true"
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlinx-serialization'
+
+if (isNewArchitectureEnabled()) {
+  apply plugin: 'com.facebook.react'
+}
 
 def getExtOrDefault(name) {
   return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['BetterTusClient_' + name]
@@ -29,35 +37,30 @@ def getExtOrIntegerDefault(name) {
 
 android {
   compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
-  buildToolsVersion getExtOrDefault('buildToolsVersion')
+
   defaultConfig {
-    minSdkVersion 16
+    minSdkVersion getExtOrIntegerDefault('minSdkVersion')
     targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
-    versionCode 1
-    versionName "1.0"
-
+    buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
   }
-
   buildTypes {
     release {
       minifyEnabled false
     }
   }
+
   lintOptions {
     disable 'GradleCompatible'
   }
+
   compileOptions {
     sourceCompatibility JavaVersion.VERSION_1_8
     targetCompatibility JavaVersion.VERSION_1_8
-  }
-  kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_1_8.toString()
   }
 }
 
 repositories {
   mavenCentral()
-  jcenter()
   google()
 
   def found = false
@@ -68,8 +71,8 @@ repositories {
     defaultDir = rootProject.ext.get('reactNativeAndroidRoot')
   } else {
     defaultDir = new File(
-            projectDir,
-            '/../../../node_modules/react-native/android'
+      projectDir,
+      '/../../../node_modules/react-native/android'
     )
   }
 
@@ -89,13 +92,13 @@ repositories {
       parentDir = parentDir.parentFile
 
       def androidSourcesDir = new File(
-              parentDir,
-              'node_modules/react-native'
+        parentDir,
+        'node_modules/react-native'
       )
 
       def androidPrebuiltBinaryDir = new File(
-              parentDir,
-              'node_modules/react-native/android'
+        parentDir,
+        'node_modules/react-native/android'
       )
 
       if (androidPrebuiltBinaryDir.exists()) {
@@ -120,8 +123,8 @@ repositories {
 
   if (!found) {
     throw new GradleException(
-            "${project.name}: unable to locate React Native android sources. " +
-                    "Ensure you have you installed React Native as a dependency in your project and try again."
+      "${project.name}: unable to locate React Native android sources. " +
+      "Ensure you have you installed React Native as a dependency in your project and try again."
     )
   }
 }
@@ -129,16 +132,20 @@ repositories {
 def kotlin_version = getExtOrDefault('kotlinVersion')
 
 dependencies {
-  def work_version = "2.5.0"
+    //noinspection GradleDynamicVersion
+  implementation "com.facebook.react:react-native:+"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
+  def work_version = "2.7.1"
   // newest version 1.1.0 requires newest bleeding edge kotlin version
   def serialization_version = "1.0.1"
 
-  // noinspection GradleDynamicVersion
-  api 'com.facebook.react:react-native:+'
+  api "androidx.work:work-runtime-ktx:$work_version"
+  implementation "androidx.work:work-gcm:$work_version"
 
   // TUS
-  implementation "io.tus.java.client:tus-java-client:0.4.3"
-  implementation "io.tus.android.client:tus-android-client:0.1.9"
+  implementation "io.tus.java.client:tus-java-client:0.4.5"
+  implementation "io.tus.android.client:tus-android-client:0.1.10"
 
   // KOTLIN
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -147,7 +154,11 @@ dependencies {
   implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0"
   implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0"
 
-  // WORKER
-  api "androidx.work:work-runtime-ktx:$work_version"
-  implementation "androidx.work:work-gcm:$work_version"
+  if (isNewArchitectureEnabled()) {
+    react {
+      jsRootDir = file("../src/")
+      libraryName = "BetterTusClient"
+      codegenJavaPackageName = "com.example.reactnativebettertusclient"
+    }
+  }
 }

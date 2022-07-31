@@ -1,4 +1,4 @@
-package com.bettertusclientexample.newarchitecture;
+package com.example.reactnativebettertusclient.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.bettertusclientexample.BuildConfig;
-import com.bettertusclientexample.newarchitecture.components.MainComponentsRegistry;
-import com.bettertusclientexample.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.example.reactnativebettertusclient.BuildConfig;
+import com.example.reactnativebettertusclient.newarchitecture.components.MainComponentsRegistry;
+import com.example.reactnativebettertusclient.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
