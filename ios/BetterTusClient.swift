@@ -120,7 +120,7 @@ public class BetterTusClient: RCTEventEmitter, TUSDelegate {
                 "uploadId": upload?.id,
                 "error": error?.localizedDescription,
                 "message": response?.message,
-                "errorCode": response?.errorCode
+                "errorCode": "TODO" // response?.errorCode
             ])
         }
     }

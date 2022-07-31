@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text, Button, Platform } from 'react-native';
 import {
   ImagePickerResponse,
   launchImageLibrary,
@@ -30,10 +30,14 @@ export default function App() {
     setUploading(0);
     setUploaded(0);
     uploadQueue.forEach((response) => {
+      const uri =
+        Platform.OS === 'ios'
+          ? response.uri?.replace('file://', '')
+          : response.uri;
       BetterTusClient.createUpload(
         response.fileSize + '',
         // @ts-expect-error We checked earlier that this isn't null!
-        response.uri,
+        uri,
         '.jpg',
         {
           exampleMetadata: 'exampleValue',
@@ -73,6 +77,14 @@ export default function App() {
       console.log('UPLOADED', payload.uploadId, 'to url', payload.url);
       setUploaded((prev) => prev + 1);
       setUploading((prev) => prev - 1);
+    });
+
+    BetterTusClient.eventEmitter.addListener('onFailure', (payload) => {
+      console.log('FAILURE', payload);
+    });
+
+    BetterTusClient.eventEmitter.addListener('onGlobalProgress', (payload) => {
+      console.log('GlobalProgress', payload);
     });
 
     return () => {
